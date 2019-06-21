@@ -1,0 +1,10 @@
+{
+  "name": "leeCode",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-loader": "^2.1.2"
+  }
+}
