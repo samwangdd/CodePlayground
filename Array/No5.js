@@ -12,7 +12,7 @@ var singleNumber = function(nums) {
   let only = 0;
   const len = nums.length;
   for (let i = 0; i < len; i++) {
-    only = only ^ nums[i]
+    only = only ^ nums[i];
   }
   return only;
 };
@@ -21,16 +21,16 @@ var singleNumber = function(nums) {
   let list = nums.sort();
   let only = null;
   const len = list.length;
-  if (len !== 1){
-    for(let i = 0; i< len; i++) {
-      if(i ===0 && list[i] !== list[i+1]){
-        return only = list[i]
-      } else if (list[i] !== list[i-1] && list[i] !== list[i+1]) {
-        return only=list[i]
+  if (len !== 1) {
+    for (let i = 0; i < len; i++) {
+      if (i === 0 && list[i] !== list[i + 1]) {
+        return (only = list[i]);
+      } else if (list[i] !== list[i - 1] && list[i] !== list[i + 1]) {
+        return (only = list[i]);
       }
     }
-  }else{
-    only = list[0]
+  } else {
+    only = list[0];
   }
-  return only
+  return only;
 };
