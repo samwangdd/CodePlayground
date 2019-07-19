@@ -2,7 +2,7 @@
 
 示例 1:
 
-输入: nums1 = [1,2,2,1], nums2 = [2,2] 
+输入: nums1 = [1,2,2,1], nums2 = [2,2]
 输出: [2,2]
 
 */
@@ -32,4 +32,24 @@ var intersect = function(nums1, nums2) {
     }
   }
   return result;
+};
+
+/**
+ * 方法二
+ * @param {*} nums1
+ * @param {*} nums2
+ */
+var intersect = function(nums1, nums2) {
+  let newArr = [];
+  // 循环nums2
+  for (let i = 0; i < nums1.length; i++) {
+    // 如果nums1[i]也存在于nums2，返回下标
+    if (num2.indexOf(num1[i]) !== -1) {
+      // 将nums1[i]加入到newArr
+      newArr.push(nums1[i]);
+      // 同时从nums2中删除
+      nums2.splice(num2.indexOf(num1[i]), 1);
+    }
+  }
+  return newArr;
 };
