@@ -53,3 +53,11 @@ var intersect = function(nums1, nums2) {
   }
   return newArr;
 };
+
+function MaxInArr(arr) {
+  try {
+    return arr.reduce((acc, cur) => Math.max(acc, cur));    
+  } catch (error) {
+    return null
+  }
+}
