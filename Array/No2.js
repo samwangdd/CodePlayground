@@ -1,7 +1,7 @@
 /*
-* 买卖股票的最佳时机
-* 可以多次交易同一支股票
-*/
+ * 买卖股票的最佳时机
+ * 可以多次交易同一支股票
+ */
 
 /* 起初，打算使用双重遍历的方式，依次与后面每个数比较，遇到比当前大的数立即退出循环 */
 
@@ -30,15 +30,15 @@ var maxProfit = function(prices) {
 /**
  * 思路二：如果后一天的价格比前一天高，则卖出获利
  * 这种思路只关注简单的数字关系
- * 
- * @param {number[]} prices 
+ *
+ * @param {number[]} prices
  */
-let maxProfit = function (prices) {
-    let max = 0
-    for (let i = 0; i < prices.length; i++) {
-        if (prices[i] < prices[i + 1]) {
-            max += prices[i + 1] - prices[i]
-        }
+let maxProfit = function(prices) {
+  let max = 0;
+  for (let i = 0; i < prices.length; i++) {
+    if (prices[i] < prices[i + 1]) {
+      max += prices[i + 1] - prices[i];
     }
-    return max
-}
+  }
+  return max;
+};
