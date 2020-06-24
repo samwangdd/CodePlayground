@@ -118,6 +118,31 @@ result.elimitated.forEach((name) => {
 console.log(`胜利者：${result.winner}`);
 
 // 回文检查
-function palindromeChecker(params) {
-  
+function palindromeChecker(str) {
+  // 判断字符串是否合法
+  if (str === undefined || str === null || str === '') {
+    return false;
+  }
+  const deque = new Deque();
+  // 去掉字符串中的空格
+  const lowerStr = str.toLocaleLowerCase().split(' ').join('');
+  let firstChar, lastChar;
+  let isEqual = true;
+  // 将字符串传入队列
+  for (let i = 0; i < lowerStr.length; i++) {
+    deque.addBack(lowerStr.charAt(i));
+  }
+
+  while (deque.size() > 1 && isEqual) {
+    firstChar = deque.removeFront();
+    lastChar = deque.removeBack();
+    if (firstChar !== lastChar) {
+      isEqual = false;
+    }
+  }
+
+  return isEqual;
 }
+
+console.log('abccba :>> ', palindromeChecker('abccba'));
+console.log('Step on no pets :>> ', palindromeChecker('Step on no pets'));
