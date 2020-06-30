@@ -24,7 +24,6 @@ class LinkedList {
     this.head = undefined;
     this.equalsFn = equalsFn;
   }
-
   push(element) {
     const node = new Node(element);
     let current;
@@ -40,7 +39,6 @@ class LinkedList {
     }
     this.count++;
   }
-
   getElementAt(index) {
     if (index >= 0 && index <= this.count) {
       let node = this.head;
@@ -51,7 +49,6 @@ class LinkedList {
     }
     return undefined;
   }
-
   insert(element, index) {
     if (index >= 0 && index <= this.count) {
       const node = new Node(element);
@@ -70,7 +67,6 @@ class LinkedList {
     }
     return false;
   }
-
   removeAt(index) {
     if (index >= 0 && index < this.count) {
       let current = this.head;
@@ -91,6 +87,29 @@ class LinkedList {
     }
     return undefined;
   }
+  indexOf(element) {
+    let current = this.head;
+    for (let i = 0; i < this.count; i++) {
+      if (this.equalsFn(element, current.element)) {
+        return i;
+      }
+      current = current.next;
+    }
+    return -1;
+  }
+  remove(element) {
+    const index = this.indexOf(element);
+    return this.removeAt(index);
+  }
+  size() {
+    return this.count;
+  }
+  isEmpty() {
+    return this.count === 0;
+  }
+  getHead() {
+    return this.head;
+  }
 }
 
 const list = new LinkedList();
@@ -104,3 +123,7 @@ list.insert(9, 1);
 console.log('list3 :>> ', list);
 list.insert(8, 2);
 console.log('list4 :>> ', list);
+console.log('list.indexOf(15) :>> ', list.indexOf(15));
+console.log('list.indexOf(10) :>> ', list.indexOf(10));
+console.log('list.indexOf(9) :>> ', list.indexOf(9));
+console.log('list.indexOf(8) :>> ', list.indexOf(8));
