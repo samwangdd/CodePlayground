@@ -25,7 +25,7 @@ function fibonacciIterative(n) {
 }
 
 /**
- * 记忆函数的计算结果
+ * 记忆函数
  * @param {Function} fn 处理的函数
  * @param {any} n
  */
