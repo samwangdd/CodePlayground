@@ -12,6 +12,7 @@ function defaultCompare(a, b) {
 const Compare = {
   LESS_THAN: -1,
   BIGGER_THAN: 1,
+  EQUALS: 0,
 };
 
 // 方式一，冒泡排序：双重循环，元素向上移动至正确的位置，就好像气泡升至表面一样
@@ -45,7 +46,7 @@ function createNonStoredArray(size) {
   return array;
 }
 
-// 选择排序：找到数据结构中的最小值，并将其放置在第一位，接着找到第二小的值...
+// 方式二，选择排序：找到数据结构中的最小值，并将其放置在第一位，接着找到第二小的值...
 function selectionSort(array, compareFn = defaultCompare) {
   const { length } = array;
   let indexMin;
@@ -66,7 +67,7 @@ function selectionSort(array, compareFn = defaultCompare) {
   return array;
 }
 
-// 插入排序：假设第一个值已经排好序，第二项与它比较应该放置在哪里？
+// 方式三，插入排序：假设第一个值已经排好序，第二项与它比较应该放置在哪里？
 function insertionSort(array, compareFn = defaultCompare) {
   const len = array.length;
   let temp; // 用变量保存模版值！
@@ -84,7 +85,7 @@ function insertionSort(array, compareFn = defaultCompare) {
   return array;
 }
 
-// 归并排序
+// 方式四，归并排序
 // 分治思想，将数组拆分成小数组，递归调用，直到每个数组只有一个元素
 function mergeSort(array, compareFn = defaultCompare) {
   // 递归基线条件
@@ -112,10 +113,58 @@ function merge(left, right, compareFn = defaultCompare) {
   return result.concat(i < left.length ? left.slice(i) : right.slice(j));
 }
 
+// 快速排序：http://www.ruanyifeng.com/blog/2011/04/quicksort_in_javascript.html
+function quickSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  // 找到主元的序号
+  const pivotIndex = Math.floor(arr.length / 2);
+  const pivot = arr.splice(pivotIndex, 1)[0]; // ！！改变了原数组长度
+  const left = [];
+  const right = [];
+  for (let i = 0; i < arr.length; i++) {
+    // 小于主元的放在left, 大于主元的放在right
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+
+  // 递归调用
+  return quickSort(left).concat([pivot], quickSort(right));
+}
+
+// 二分搜索
+function BinarySearch(array, targetVal, compareFn = defaultCompare) {
+  const sortArray = quickSort(array); // 排序
+  let low = 0;
+  let high = sortArray.length - 1;
+  while (lesserOrEquals(low, high, compareFn)) {
+    const mid = Math.floor((low + high) / 2);
+    const element = sortArray[mid]; // 找到中间值
+    if (compareFn(element, targetVal) === Compare.BIGGER_THAN) {
+      high = mid - 1;
+    } else if (compareFn(element, targetVal) === Compare.LESS_THAN) {
+      low = mid + 1;
+    } else {
+      return mid;
+    }
+  }
+  return -1;
+}
+
+function lesserOrEquals(low, high, compareFn = defaultCompare) {
+  const comp = compareFn(low, high);
+  return comp === Compare.LESS_THAN || comp === Compare.EQUALS;
+}
+
 let array = createNonStoredArray(5);
 console.log('array :>> ', array);
 // array = bubbleSort(array);
 // array = selectionSort(array);
 // array = insertionSort(array);
-array = mergeSort(array);
+// array = mergeSort(array);
+array = quickSort(array);
 console.log('sorted array :>> ', array);
