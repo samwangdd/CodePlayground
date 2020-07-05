@@ -136,7 +136,7 @@ function quickSort(arr) {
   return quickSort(left).concat([pivot], quickSort(right));
 }
 
-// 二分搜索
+// 二分搜索，迭代版本
 function BinarySearch(array, targetVal, compareFn = defaultCompare) {
   const sortArray = quickSort(array); // 排序
   let low = 0;
