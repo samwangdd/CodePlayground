@@ -113,7 +113,8 @@ function merge(left, right, compareFn = defaultCompare) {
   return result.concat(i < left.length ? left.slice(i) : right.slice(j));
 }
 
-// 快速排序：http://www.ruanyifeng.com/blog/2011/04/quicksort_in_javascript.html
+// 方式五：快速排序
+// http://www.ruanyifeng.com/blog/2011/04/quicksort_in_javascript.html
 function quickSort(arr) {
   if (arr.length <= 1) {
     return arr;
