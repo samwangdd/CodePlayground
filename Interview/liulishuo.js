@@ -20,6 +20,16 @@ function customAjax(url, cb, maxSize) {
   }
 }
 
+/**
+ * 请求函数，可以设置最大请求数
+ *
+ * @param {String} url 资源路径
+ * @param {Object} body 请求体
+ * @param {*} successCB
+ * @param {*} errorCB
+ * @param {number} [maxSize=0] 最大请求数
+ * @returns
+ */
 function request(url, body, successCB, errorCB, maxSize = 0) {
   return fetch(url, body)
     .then((res) => successCB(res))
