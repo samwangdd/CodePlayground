@@ -20,12 +20,31 @@ function deduplication(arr) {
   }, []);
 }
 
-const responseList = [
-  { id: 1, a: 1 },
-  { id: 2, a: 2 },
-  { id: 3, a: 3 },
-  { id: 1, a: 1 },
-];
-
 const result = deduplication(responseList);
 console.log('result :>> ', result);
+
+// 说出下面代码的执行顺序
+async function async1() {
+  console.log(1);
+  const result = await async2();
+  console.log(3);
+}
+
+async function async2() {
+  console.log(2);
+  /* // 变体
+  Promise.resolve().then(() => {
+    console.log(2);
+  }); */
+}
+
+Promise.resolve().then(() => {
+  console.log(4);
+});
+
+setTimeout(() => {
+  console.log(5);
+});
+
+async1();
+console.log(6);
