@@ -40,7 +40,32 @@ function request(url, body, successCB, errorCB, maxSize = 0) {
 }
 
 // react 实现一个防抖查询输入框
-// 防抖函数
-function debounce(params) {
-  
+/**
+ * 防抖函数
+ *
+ * @param {*} fn 被延迟执行的函数
+ * @param {*} wait 等待时间
+ * @param {*} immediate 立即执行
+ * @returns
+ */
+function debounce(fn, wait, immediate) {
+  let timer = null;
+  return function (...args) {
+    let context = this;
+    if (immediate && !timer) {
+      fn.apply(contex, args);
+    }
+    if (timer) clearInterval(timer);
+    timer = setTimeout(() => fn.apply(context, args), wait);
+  };
 }
+
+const SearchInput = () => {
+  const [value, setValue] = useState('');
+  const callAjax = debounce(fetch, 500);
+  const handleSearch = (e) => {
+    setValue(e.target.value);
+    callAjax();
+  };
+  return <input type="text" value={value} onChange={handleSearch} />;
+};
