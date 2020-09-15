@@ -49,6 +49,13 @@ Function.prototype.bind2 = function (context, ...args1) {
   return resFn;
 };
 
+/**
+ * 手动实现 new
+ *
+ * @param {*} constructor 构造函数
+ * @param {*} args 参数
+ * @returns
+ */
 function objectFactory(constructor, ...args) {
   const obj = new Object();
   obj._proto_ = constructor.prototype;
@@ -65,3 +72,158 @@ function Otaku(name, age) {
 
 const obj = objectFactory(Otaku);
 console.log('obj :>> ', obj);
+
+/**
+ * 自动柯里化，支持单参函数
+ * @param {Function} fn
+ * @param  {...any} args1 参数
+ */
+const curry = (fn, ...args1) => (...args2) =>
+  ((arg) => (arg.length === fn.length ? fn(...arg) : curry(fn, ...arg)))([...args1, ...args2]);
+
+const foo = (a, b, c) => a * b * c;
+const res = curry(foo)(2)(3)(4);
+
+function getType(obj) {
+  if (obj === null) return String(obj);
+  return typeof obj === 'object'
+    ? Object.prototype.toString.call(obj).replace('[object ', '').replace(']', '').toLowerCase()
+    : typeof obj;
+}
+
+console.log('type', [
+  getType(NaN),
+  getType('123'),
+  getType(11),
+  getType({ foo: 'a' }),
+  getType([123]),
+]);
+
+const filter = (arr) => (cb) => {
+  const res = [];
+  arr.forEach((i) => {
+    if (cb(i)) {
+      res.push(cb(i));
+    }
+  });
+  return res;
+};
+
+const arr = [1, 2, 3, 4];
+const cbfn = (i) => {
+  if (i % 2 === 0) {
+    return i;
+  }
+};
+console.log('filter :>> ', filter(arr)(cbfn));
+console.log(Math.abs(0.1 + 0.2 - 0.3) <= Number.EPSILON);
+
+var symbolObject = Object(Symbol('a'));
+
+var symbolObject = Object(Symbol('a'));
+
+console.log(Object.prototype.toString.call(symbolObject)); //[object Symbol]
+
+var o = {
+  valueOf: () => {
+    console.log('valueOf');
+    return {};
+  },
+  toString: () => {
+    console.log('toString');
+    return {};
+  },
+};
+
+o[Symbol.toPrimitive] = () => {
+  console.log('toPrimitive');
+  return 'hello';
+};
+
+console.log(o + '');
+// toPrimitive
+// hello
+
+/**
+ * 数组扁平化
+ *
+ * @param {*} arr
+ * @param {*} deep
+ */
+/* function flatArray(arr, deep = 1) {
+  let count = 0;
+  while (arr.some((item) => Array.isArray(item)) && count < deep) {
+    arr = [].concat(...arr);
+    count++;
+  }
+  return arr;
+} */
+
+/* function flatArray(arr = [], n = 1) {
+  let resArr = arr;
+  while (n > 0) {
+    resArr = resArr.reduce((acc, val) => {
+      return acc.concat(val);
+    }, []);
+    n += -1;
+  }
+  return resArr;
+} */
+function flatArray(arr, deep = 1) {
+  const flat = function* (array, time = 0) {
+    for (const item of array) {
+      let innerTime = 0;
+      console.log('innerTime :>> ', innerTime);
+      console.log('time :>> ', time);
+      // console.log('deep :>> ', deep);
+      if (Array.isArray(item) && time < deep) {
+        innerTime++;
+        yield* flat(item, innerTime);
+      } else {
+        yield item;
+      }
+    }
+  };
+
+  return [...flat(arr)];
+}
+
+/**
+ * 数组扁平化
+ *
+ * @param {Array} arr 目标数组
+ * @returns {Array}
+ */
+/* function flatArray(arr) {
+  const flat = function* (array) {
+    if (!Array.isArray(array)) yield array;
+    else for (let el of array) yield* flat(el);
+  };
+
+  return [...flat(arr)];
+} */
+
+const res = flatArray(
+  [
+    [1, 2],
+    [2, 4],
+    [[4, 5], [[5, 6]]],
+  ],
+  3
+);
+
+console.log(res);
+
+function* createIterator(items) {
+  for (let i = 0; i < items.length; i++) {
+    // const element = items[i];
+    yield items[i];
+  }
+}
+
+let iterator = createIterator([1, 2, 3]);
+console.log('iterator.next() 1 :>> ', iterator.next());
+console.log('iterator.next() 2 :>> ', iterator.next());
+console.log('iterator.next() 3 :>> ', iterator.next());
+console.log('iterator.next() 4 :>> ', iterator.next());
+console.log('iterator.next() 5 :>> ', iterator.next());
