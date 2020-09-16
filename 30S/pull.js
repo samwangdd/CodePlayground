@@ -12,5 +12,5 @@ const pull = (arr, ...args) => {
 };
 
 let myArray = ['a', 'b', 'c', 'a', 'b', 'c'];
-pull(myArray, ['a', 'c']); // myArray = [ 'b', 'b' ]
+pull(myArray, ['a', 'c']);
 console.log('myArray :>> ', myArray);
