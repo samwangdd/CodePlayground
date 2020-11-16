@@ -40,7 +40,7 @@ Function.prototype.bind2 = function (context, ...args1) {
     return self.apply(this instanceof resFn ? this : context, args1.concat(args2));
   };
 
-  // 如果将 fBound.prototype = this.prototype，我们直接修改 fBound.prototype 的时候，也会直接修改绑定函数的 prototype
+  // 如果将 resFn.prototype = this.prototype，我们直接修改 resFn.prototype 的时候，也会直接修改绑定函数的 prototype
   // 通过 DumpFunction 中转
   const DumpFunction = function () {};
   DumpFunction.prototype = this.prototype;
@@ -213,17 +213,3 @@ const res = flatArray(
 );
 
 console.log(res);
-
-function* createIterator(items) {
-  for (let i = 0; i < items.length; i++) {
-    // const element = items[i];
-    yield items[i];
-  }
-}
-
-let iterator = createIterator([1, 2, 3]);
-console.log('iterator.next() 1 :>> ', iterator.next());
-console.log('iterator.next() 2 :>> ', iterator.next());
-console.log('iterator.next() 3 :>> ', iterator.next());
-console.log('iterator.next() 4 :>> ', iterator.next());
-console.log('iterator.next() 5 :>> ', iterator.next());
