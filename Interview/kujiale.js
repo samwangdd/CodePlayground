@@ -44,6 +44,22 @@ child3.prototype = Object.create(parent3.prototype); // 不产生原型链桥接
 child3.prototype.constructor = child3;
 console.log('new child3() :>> ', new child3());
 
+// 实现4 ES6 class
+class parent4 {
+  constructor() {}
+  name() {
+    return 'lee';
+  }
+}
+
+class child4 extends parent4 {
+  constructor() {
+    super();
+  }
+}
+const c4 = new child4();
+console.log('c4 :>> ', c4.name());
+
 /**
  * 深拷贝
  *
@@ -111,3 +127,248 @@ Function.prototype.bindThis = function (context, ...args1) {
 };
 
 foo.bindThis(bar)('变身', '美丽', '智慧');
+
+function debounce(func, wait) {
+  let timeout = null;
+  return function () {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    setTimeout(func, wait);
+  };
+}
+
+function logger() {
+  console.log('123 :>> ', 123);
+}
+
+function throttle(fn, wait) {
+  // 通过闭包保存 run，是否可以执行
+  let run = true;
+  return function () {
+    // 如果 run 为 false，直接 return
+    if (!run) return;
+    run = false;
+    setTimeout(() => {
+      fn();
+      run = true;
+    }, wait);
+  };
+}
+
+/**
+ * 实现 array.fill
+ *
+ * @param {*} arr
+ * @param {*} val
+ */
+function fill(arr, val) {
+  const arrRaw = [...arr];
+  arrRaw.shift();
+  const len = arrRaw.length;
+  if (len) {
+    return [val].concat(fill(arrRaw, val));
+  } else {
+    // ?? 为什么直接返回 val
+    console.log('123 :>> ', 123);
+    return val;
+  }
+}
+
+const arr = [1, 2, 3];
+console.log('fill(arr, 5) :>> ', fill(arr, 5));
+
+/**
+ * ES5 实现私有变量
+ */
+// 对象的私有变量
+const customObj = (function () {
+  let name = 'lee';
+  return {
+    name,
+    set: function (val) {
+      name = val;
+    },
+  };
+})();
+
+// 函数的私有变量
+function Person(name) {
+  let age = 18;
+  this.name = name;
+  this.getAge = function () {
+    return age;
+  };
+  this.addAge = function () {
+    return age++;
+  };
+}
+
+var lee = new Person('lee');
+console.log('lee.name :>> ', lee.name);
+console.log('lee.age :>> ', lee.age);
+console.log('lee.getAge() :>> ', lee.getAge());
+console.log('lee.setAge() :>> ', lee.addAge());
+
+/**
+ * 实现 Promise.all
+ * 1. 返回一个 promise
+ * 2. 循环所有 promise 并执行
+ * 3. 通过计数器判断是否所有 promise 已经执行完成
+ * 4. 如果失败则后续不再执行
+ */
+function PromiseAll(promiseArr) {
+  let count = 0;
+  const result = [];
+  const promiseLen = promiseArr.length;
+  return new Promise((resolve, reject) => {
+    for (const promise of promiseArr) {
+      // 如果元素不是 Promise 对象，则使用 Promise.resolve 转成 Promise 对象
+      Promise.resolve(promise).then(
+        (res) => {
+          count++;
+          // 使用 push，不能判断哪个 res 先返回
+          result.push(res);
+          if (count === promiseLen) {
+            resolve(result);
+          }
+        },
+        (err) => {
+          return reject(err);
+        }
+      );
+    }
+  });
+}
+
+function _PromiseAll(promiseArr) {
+  const len = promiseArr.length;
+  const resArr = Array.from(len);
+  let count = 0;
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < len; i++) {
+      Promise.resolve(promiseArr[i]).then(
+        (res) => {
+          resArr[i] = res;
+          count++;
+          if (count === len) resolve(resArr);
+        },
+        (err) => reject(err)
+      );
+    }
+  });
+}
+
+/**
+ * 异步并发请求
+ * @param {Promise<Array>} requests promise数组
+ * @param {*} limit 并发数量
+ */
+const concurrencyPromise = (requests, limit) => {
+  const results = [];
+  const totalRequests = [...requests];
+  let resolveCount = 0;
+
+  const handlePromise = (promise) => {
+    return new Promise((resolve, reject) => {
+      promise.then((res) => resolve(res)).catch((e) => reject(e));
+    });
+  };
+
+  return new Promise((resolve) => {
+    // 模拟开启limit个线程
+    for (let i = 1; i <= limit; i++) {
+      invokeThread();
+    }
+
+    function invokeThread() {
+      if (!totalRequests.length) return;
+      const current = totalRequests.shift();
+      handlePromise(current)
+        .then((res) => results.push(res))
+        .finally(() => {
+          resolveCount += 1;
+          if (resolveCount === requests.length) {
+            resolve(results);
+          }
+          // promise done之后 获取新的promise执行
+          invokeThread();
+        });
+    }
+  });
+};
+
+const reqs = Array.from(
+  { length: 5 },
+  (_, index) =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(index);
+      }, 1000);
+    })
+);
+
+const task = [];
+const addTask = (time, order) => {
+  task.push(
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(order);
+      }, time);
+    })
+  );
+};
+addTask(400, 4);
+addTask(200, 2);
+addTask(300, 3);
+addTask(100, 1);
+
+console.log('task :>> ', task);
+
+concurrencyPromise(task, 2)
+  .then((res) => {
+    console.log('res :>> ', res);
+  })
+  .catch((err) => console.log('err2 :>> ', err));
+
+/**
+ * promise 重试函数
+ * 解决 promise 失败后可重新执行
+ * 如：网络请求失败后（如超时，网络抖动），重新发起请求，可设置请求间隔和最大重复请求次数
+ *
+ * @param {PromiseLike} fn
+ * @param {Number} interval 时间间隔，ms
+ * @param {Number} limit 最大重复请求次数
+ */
+function promiseLimit(fn, interval, limit) {
+  let tryTimes = limit;
+  return new Promise((resolve, reject) => {
+    fn.then((res) => resolve(res)).catch((err) => {
+      if (tryTimes > 0) {
+        setTimeout(() => {
+          console.log('tryTimes :>> ', tryTimes);
+          promiseLimit(fn, interval, --tryTimes);
+        }, interval);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
+
+const promiseErr = new Promise(() => {
+  throw new Error('boom!');
+});
+
+promiseLimit(promiseErr, 2000, 3)
+  .then((res) => {
+    console.log('res', res);
+  })
+  .catch((err) => console.error('err :>> ', err));
+
+function handleClick(params, callback) {
+  dosomething(params);
+  if (success) {
+    callback();
+  }
+}

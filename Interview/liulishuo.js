@@ -21,16 +21,16 @@ function customAjax(url, cb, maxSize) {
 }
 
 /**
- * 请求函数，可以设置最大请求数
+ * 请求函数，可以设置最大超时的请求次数
  *
  * @param {String} url 资源路径
  * @param {Object} body 请求体
  * @param {*} successCB
  * @param {*} errorCB
- * @param {number} [maxSize=0] 最大请求数
+ * @param {number} [maxSize=1] 最大请求数
  * @returns
  */
-function request(url, body, successCB, errorCB, maxSize = 0) {
+function request(url, body, successCB, errorCB, maxSize = 1) {
   return fetch(url, body)
     .then((res) => successCB(res))
     .catch(() => {
