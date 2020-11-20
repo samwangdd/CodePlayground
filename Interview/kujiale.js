@@ -372,3 +372,25 @@ function handleClick(params, callback) {
     callback();
   }
 }
+
+const promiseErr = new Promise((resovle, reject) => {
+  reject('asd');
+});
+
+async function handlPromise(params) {
+  const res = await promiseErr;
+  console.log('res :>> ', res);
+}
+
+function test(params) {
+  console.log(1);
+  setTimeout(() => {
+    console.log('2 :>> ', 2);
+  }, 2000);
+  setTimeout(() => {
+    console.log('3 :>> ', 3);
+  }, 0);
+  console.log('4 :>> ', 4);
+}
+
+test();
