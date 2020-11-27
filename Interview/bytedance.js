@@ -8,6 +8,7 @@
     [asd, ehe, rjr]
     [d, erregrnt, eruk]
     [rth, sthst, ar, gae]
+
  */
 const str = 'asd ehe  rjr\nd  erregrnt eruk\nrth sthst ar   gae';
 
