@@ -134,7 +134,7 @@ const cb1 = () => {
 const cb2 = () => {
   console.log('success cb2:>> ');
 };
-// el.off('click', cb2);
+el.off('click', cb2);
 el.on('click', cb1);
 el.trigger({ type: 'click' });
 el.off('click', cb2);
