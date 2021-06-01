@@ -7,7 +7,7 @@
 const pull = (arr, ...args) => {
   let argState = Array.isArray(args[0]) ? args[0] : args;
   let pulled = arr.filter((v) => !argState.includes(v));
-  arr.length = 0;
+  arr.length = 0; // 清空数组
   pulled.forEach((v) => arr.push(v));
 };
 
