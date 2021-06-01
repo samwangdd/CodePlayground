@@ -9,5 +9,6 @@ const data = {
     },
   },
 };
+
 console.log('1 :>> ', deepGet(data, ['foo', 'foz', index]));
 console.log('2 :>> ', deepGet(data, ['foo', 'bar', 'baz', 8, 'foz']));
