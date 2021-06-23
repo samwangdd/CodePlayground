@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    #app {
+      width: 350px;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+      border: 1px solid #fff;
+      display: inline-block;
+      vertical-align: middle;
+      /* font style */
+      font-size: 50px;
+      line-height: 100px;
+      text-align: center;
+    }
+  </style>
+  <body>
+    <div id="app"></div>
+  </body>
+  <script>
+    let type = 1;
+    let pattern = [
+      [1, 0, 0],
+      [0, 2, 0],
+      [0, 0, 0],
+    ];
+
+    // 生成棋盘及棋子
+    function generate() {
+      const ele = document.getElementById('app');
+      ele.innerHTML = ''; // 清空 DOM，重新绘制
+
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          let cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.innerHTML =
+            pattern[i][j] === 2 ? '❌' : pattern[i][j] === 1 ? '⭕️' : '';
+
+          cell.addEventListener('click', () => play(i, j));
+          ele.appendChild(cell);
+        }
+      }
+    }
+
+    // 落子
+    function play(x, y) {
+      if (pattern[x][y] !== 0) return;
+
+      pattern[x][y] = type;
+
+      generate();
+
+      // 是否结束
+      const isEnd = check(pattern, type);
+      if (isEnd) {
+        alert(type === 1 ? '⭕️ is WIN! ' : '❌ is WIN! ');
+      }
+      type = 3 - type;
+    }
+
+    // REVIEW: 优化
+    function check(pattern, type) {
+      // 横排相等
+      for (let i = 0; i < 3; i++) {
+        let win = true;
+        for (let j = 0; j < 3; j++) {
+          if (pattern[i][j] !== type) {
+            win = false;
+            break;
+          }
+        }
+        if (win) return true;
+      }
+
+      // 竖排相等
+      for (let i = 0; i < 3; i++) {
+        let win = true;
+        for (let j = 0; j < 3; j++) {
+          if (pattern[j][i] !== type) {
+            win = false;
+            break;
+          }
+        }
+        if (win) return true;
+      }
+
+      // 左斜相等
+      {
+        let win = true;
+        for (let i = 0; i < 3; i++) {
+          if (pattern[i][i] !== type) {
+            win = false;
+            break;
+          }
+        }
+        if (win) return true;
+      }
+
+      // 右斜相等
+      {
+        let win = true;
+        for (let i = 0; i < 3; i++) {
+          if (pattern[i][2 - i] !== type) {
+            win = false;
+            break;
+          }
+        }
+        if (win) return true;
+      }
+
+      return false;
+    }
+
+    generate();
+  </script>
+</html>
