@@ -29,7 +29,8 @@ type ReplacedNotExistKeys = ReplaceKeys<Nodes, 'name', { aa: number }>; // {type
 // type ReplaceKeys<T, S, O> = {
 //   [K in keyof T]: K extends S ? (K extends keyof O ? O[K] : never) : T[K];
 // };
-// FIXME:
+
+// REVIEW:
 type ReplaceKeys<T, U, R> = T extends T
   ? {
       [K in keyof T]: K extends Extract<K, U> ? R[Extract<K, keyof R>] : T[K];
