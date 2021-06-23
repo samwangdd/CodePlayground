@@ -3,8 +3,11 @@ type perm = Permutation<'A' | 'B' | 'C'>; // ['A', 'B', 'C'] | ['A', 'C', 'B'] |
 
 // FIXME: 没看懂
 // union 范型怎么表示？
-type PermuteItem<Union, Item, Rest = Exclude<Union, Item>> =
-  IsNever<Rest> extends true ? [Item] : [Item, ...Permutation<Rest>];
+type PermuteItem<
+  Union,
+  Item,
+  Rest = Exclude<Union, Item>
+> = IsNever<Rest> extends true ? [Item] : [Item, ...Permutation<Rest>];
 
 type Permutation<Union, Item = Union> = Item extends Item
   ? PermuteItem<Union, Item>
