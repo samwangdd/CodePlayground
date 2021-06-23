@@ -3,6 +3,7 @@ type case2 = IsUnion<string | number>; // true
 type case3 = IsUnion<[string | number]>; // false
 
 // type IsUnion<T extends any> = T extends keyof T ? true : false;
+// FIXME:
 type IsUnion<T extends any, B = T> = T extends T
   ? B[] extends T[]
     ? false
