@@ -30,8 +30,8 @@
     let type = 1;
     let pattern = [
       [1, 0, 0],
-      [0, 2, 0],
       [0, 0, 0],
+      [0, 2, 0],
     ];
 
     // 生成棋盘及棋子
@@ -59,6 +59,11 @@
       pattern[x][y] = type;
 
       generate();
+
+      const will = willWin(pattern, type);
+      if (will) {
+        console.log(type === 1 ? '⭕️  will WIN! ' : '❌  will WIN! ');
+      }
 
       // 是否结束
       const isEnd = check(pattern, type);
@@ -118,6 +123,21 @@
         if (win) return true;
       }
 
+      return false;
+    }
+
+    const clone = (data) => JSON.parse(JSON.stringify(data));
+
+    // 判断即将获胜的一方，遍历空值并赋值，检查是否符合 check 的条件
+    function willWin(pattern, type) {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (pattern[i][j] !== 0) continue;
+          let raw = clone(pattern); // 复制数据
+          raw[i][j] = type; // 赋值后检查
+          if (check(raw, type)) return true;
+        }
+      }
       return false;
     }
 
