@@ -37,7 +37,10 @@ Function.prototype.bind2 = function (context, ...args1) {
   let self = this;
   let resFn = function (...args2) {
     // 当 bind 返回的函数作为构造函数时（通过 new 构造），this指向实例;
-    return self.apply(this instanceof resFn ? this : context, args1.concat(args2));
+    return self.apply(
+      this instanceof resFn ? this : context,
+      args1.concat(args2)
+    );
   };
 
   // 如果将 resFn.prototype = this.prototype，我们直接修改 resFn.prototype 的时候，也会直接修改绑定函数的 prototype
@@ -78,8 +81,13 @@ console.log('obj :>> ', obj);
  * @param {Function} fn
  * @param  {...any} args1 参数
  */
-const curry = (fn, ...args1) => (...args2) =>
-  ((arg) => (arg.length === fn.length ? fn(...arg) : curry(fn, ...arg)))([...args1, ...args2]);
+const curry =
+  (fn, ...args1) =>
+  (...args2) =>
+    ((arg) => (arg.length === fn.length ? fn(...arg) : curry(fn, ...arg)))([
+      ...args1,
+      ...args2,
+    ]);
 
 const foo = (a, b, c) => a * b * c;
 const res = curry(foo)(2)(3)(4);
@@ -87,7 +95,11 @@ const res = curry(foo)(2)(3)(4);
 function getType(obj) {
   if (obj === null) return String(obj);
   return typeof obj === 'object'
-    ? Object.prototype.toString.call(obj).replace('[object ', '').replace(']', '').toLowerCase()
+    ? Object.prototype.toString
+        .call(obj)
+        .replace('[object ', '')
+        .replace(']', '')
+        .toLowerCase()
     : typeof obj;
 }
 
