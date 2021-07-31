@@ -19,7 +19,7 @@ var solution = function (isBadVersion) {
         left = mid + 1; // bad version 在 mid 右侧
       }
     }
-
+    // 最终将 left, right 收拢为一个值，可以通过画图推断
     return left;
   };
 };
