@@ -11,7 +11,7 @@ var search = function (nums, target) {
   let right = nums.length - 1;
   while (left <= right) {
     const mid = (right + left) >> 1;
-    if (nums[min] === target) {
+    if (nums[mid] === target) {
       return mid;
     }
     let isSmall = nums[mid] < target;
