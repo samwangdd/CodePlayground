@@ -1,4 +1,6 @@
 /**
+ * 第一个错误的版本
+ * https://leetcode-cn.com/problems/first-bad-version/
  * @param {function} isBadVersion()
  * @return {function}
  */
