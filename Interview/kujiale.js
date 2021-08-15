@@ -41,7 +41,7 @@ function child3() {
 }
 
 child3.prototype = Object.create(parent3.prototype); // 不产生原型链桥接
-child3.prototype.constructor = child3;
+child3.prototype.constructor = child3; // 修正 child3 的构造函数
 console.log('new child3() :>> ', new child3());
 
 // 实现4 ES6 class
@@ -115,7 +115,10 @@ Function.prototype.bindThis = function (context, ...args1) {
   // 第一步，改变this，返回新函数
   const self = this;
   const func = function (...args2) {
-    return self.apply(this instanceof func ? this : context, args1.concat(args2));
+    return self.apply(
+      this instanceof func ? this : context,
+      args1.concat(args2)
+    );
   };
 
   // 第二步，通过空函数中转，防止原型被修改

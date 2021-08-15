@@ -61,7 +61,7 @@ Function.prototype.bind2 = function (context, ...args1) {
  */
 function objectFactory(constructor, ...args) {
   const obj = new Object();
-  obj._proto_ = constructor.prototype;
+  obj.__proto__ = constructor.prototype;
   const res = constructor.apply(obj, args);
   return typeof res === 'object' ? res : obj;
 }
