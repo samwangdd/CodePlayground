@@ -2,6 +2,7 @@
  * @param {number[]} nums
  * @return {number[]}
  */
+// js 方法
 var sortedSquares = function (nums) {
   return nums.map((i) => i * i).sort((a, b) => a - b);
 };
@@ -22,8 +23,9 @@ var sortedSquares = function (nums) {
   return res;
 };
 
+// 双指针
 var sortedSquares = function (nums) {
-  let k = nums.length - 1;
+  let k = nums.length - 1; // k 为数组最后一位
   let res = new Array(k);
   let i = 0,
     j = k;
