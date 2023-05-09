@@ -66,13 +66,16 @@ console.log('c4 :>> ', c4.name());
  * @param {*} params
  */
 function deepClone(data, hash = new WeakMap()) {
-  if (typeof data !== 'object') return data;
+  if (typeof data !== 'object') return data; // 基本类型
   if (hash.get(data)) return hash.get(data); // 防止循环引用
+  // 特殊对象处理
   if (data instanceof Function) return data;
   if (data instanceof RegExp) return new RegExp(data);
   if (data instanceof Date) return new Date(data);
+
   const cache = new data.constructor(); // 构造初始值
   hash.set(data, cache);
+
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
       cache[key] = deepClone(data[key], hash);
